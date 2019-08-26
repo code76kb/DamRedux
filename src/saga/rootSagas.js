@@ -3,11 +3,13 @@ import NETWORK from "../network";
 import {OFFER_ALL_DATA} from "../actions/actionTypes";
 import { getOfferAllDataSuccess, getOfferAllDataError } from "../actions/userActions";
 
+const TAG = "RootSagas :";
 
 function * getOfferAllData(action){
     try{
-
-        const response = yield call(NETWORK.get,"offer/all",action.payload);
+        console.log(TAG," getOfferAllData action :"+JSON.stringify(action));
+        
+        const response = yield call(NETWORK.get,"/index.php",action.data);
         yield put(getOfferAllDataSuccess(response));
 
     }catch(error){

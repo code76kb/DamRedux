@@ -12,9 +12,10 @@ export function testIt(data){
     }
 }
 
-export const getOfferAllData=()=>{
+export const getOfferAllData=(data)=>{
     return {
-        type:OFFER_ALL_DATA
+        type:OFFER_ALL_DATA,
+        data
     };
 }
 

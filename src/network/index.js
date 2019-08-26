@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+const TAG = "Network :";
 
 function axiosInst(options){
     const defaultHeaders = {
@@ -7,7 +8,7 @@ function axiosInst(options){
       }
 
     return axios.create({
-      baseURL:"https://api.dealshare.in/",
+      baseURL:"https://api.dealshare.in",
       timeout:options.timeout || 10000,
       headers:defaultHeaders,
     });
@@ -22,7 +23,9 @@ function executeRequest(method, api, payload, options={}){
         params: options.query,
         ...body
     }
-
+    console.log(TAG," axio options :"+JSON.stringify(options));
+    console.log(TAG," axio Execute :"+JSON.stringify(req));
+    
     const axiosInstence = axiosInst(options);
     return new Promise((resolve,reject)=>{
           return axiosInstence.request(req)
@@ -37,6 +40,7 @@ function executeRequest(method, api, payload, options={}){
 
 export default {
     get(api,options){
+        console.log(TAG,"get options :"+JSON.stringify(options));
         return executeRequest("get",api,null,options);
     },
 
