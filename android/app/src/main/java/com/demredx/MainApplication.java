@@ -3,6 +3,7 @@ package com.demredx;
 import android.app.Application;
 import android.util.Log;
 
+import com.demredx.LocalStorage.WareHousePackage;
 import com.demredx.services.ChildLaborPackage;
 import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
@@ -29,8 +30,9 @@ public class MainApplication extends Application implements ReactApplication {
       List<ReactPackage> packages = new PackageList(this).getPackages();
 
        // Packages that cannot be autolinked yet can be added manually here, for example:
-       packages.add(new ImagePickerPackage());
-       packages.add(new ChildLaborPackage());
+       packages.add(new ImagePickerPackage());//Img picker test
+       packages.add(new ChildLaborPackage());//Background Services
+       packages.add(new WareHousePackage());// React and android Comman localStorage manager
 
       return packages;
     }

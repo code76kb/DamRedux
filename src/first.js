@@ -58,9 +58,9 @@ class First extends React.Component{
 
   serviceTest=()=>{
     ChildLabor.startWork(
-    {},
+    {job_id:'209'},
     (success)=>{
-     console.log(TAG,"Job Successs Callback")
+     console.log(TAG,"Job Successs Callback :",success)
     },
     (error)=>{});
 

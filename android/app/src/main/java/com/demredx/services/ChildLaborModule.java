@@ -29,7 +29,7 @@ public class ChildLaborModule extends ReactContextBaseJavaModule implements  Lif
     public void onReceive(Context context, Intent intent) {
       Log.e(TAG, "onBroadCastReceive :................................... ");
       if(jobDoneCallback!=null)
-          jobDoneCallback.invoke("JobDone");
+          jobDoneCallback.invoke(intent.getStringExtra("currentJob"));
     }
   };
 
@@ -57,6 +57,7 @@ public class ChildLaborModule extends ReactContextBaseJavaModule implements  Lif
     Activity currentActivity = getCurrentActivity();
     jobDoneCallback = successCallback;
     serviceIntent = new Intent(mContext,ChildLaborService.class);
+    serviceIntent.putExtra("job_id",config.getString("job_id"));
     currentActivity.startService(serviceIntent);
   }
 
@@ -76,11 +77,11 @@ public class ChildLaborModule extends ReactContextBaseJavaModule implements  Lif
 
   @Override
   public void onHostPause() {
-    Log.e(TAG, "onActivityCreated: Broadcast Receiver un-registered");
     //getCurrentActivity().unregisterReceiver(broadcastReceiver);
   }
   @Override
   public void onHostDestroy() {
-
+    Log.e(TAG, "onActivityCreated: Broadcast Receiver un-registered");
+    getCurrentActivity().unregisterReceiver(broadcastReceiver);
   }
 }
