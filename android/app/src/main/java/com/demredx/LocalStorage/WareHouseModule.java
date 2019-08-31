@@ -26,13 +26,13 @@ public class WareHouseModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void getSaveData(ReadableMap config, Callback successCallback, Callback failureCallback ){
+  public void getWareHouseData(ReadableMap config, Callback successCallback, Callback failureCallback ){
     String statusData = WareHouse.getSavedData(mContext);
     successCallback.invoke(statusData);
   }
 
   @ReactMethod
-  public void saveData(ReadableMap config){
+  public void saveWareHouseData(ReadableMap config){
     String dataToBeSaved = config.getString("data");
     WareHouse.saveData(mContext,dataToBeSaved);
   }

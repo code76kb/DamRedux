@@ -2,21 +2,23 @@ package com.demredx.services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Handler;
+import android.location.Location;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 import com.demredx.LocalStorage.WareHouse;
+import com.demredx.Location.EagleEye;
 import com.demredx.Network.RetrofitClient;
 import com.demredx.Network.RetrofitInterface;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,7 +39,7 @@ public class ChildLaborService extends Service {
 
   private String job_id = "-1";
 
-
+  private Timer timer;
 
 
 
@@ -46,6 +48,7 @@ public class ChildLaborService extends Service {
   public IBinder onBind(Intent intent) {
     return null;
   }
+
 
   @Override
   public void onCreate() {
@@ -57,30 +60,51 @@ public class ChildLaborService extends Service {
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.e(TAG, "onStartCommand: "+startId);
-    job_id = intent.getStringExtra("job_id");
+    if(intent!=null)
+    job_id = intent.hasExtra("job_id")?intent.getStringExtra("job_id"):"-1";
+
+
     work();
     return super.onStartCommand(intent, flags, startId);
   }
+
 
   @Override
   public void onDestroy() {
     Log.e(TAG, "onDestroy: ");
     super.onDestroy();
+    if(timer!=null)
+      timer.cancel();
   }
 
   //Run here what ever you wanna run in background and forground.
   private void work(){
     Log.e(TAG, "work: job_id Started.. "+job_id);
-    new Handler().postDelayed(new Runnable() {
+
+    //init location test
+
+
+//    new Handler().postDelayed(new Runnable() {
+//      @Override
+//      public void run() {
+//        Log.e(TAG, "run: after 30 sec");
+//
+//        //Perform Network Operation
+//        testApiRun();
+//
+////        //get Location updates
+////        locationServiceTest();
+//
+//      }
+//    },30000);
+    timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
       @Override
       public void run() {
-        Log.e(TAG, "run: after 30 sec");
-
-        //Perform Network Operation
-        testApiRun();
-
+        locationServiceTest();
       }
-    },30000);
+    },0,30000);
+
   }
 
   private void testApiRun(){
@@ -120,6 +144,15 @@ public class ChildLaborService extends Service {
       }
 
   }
+
+  private void locationServiceTest(){
+     Location location =  EagleEye.getLocation(this);
+     if(location==null)
+       Log.e(TAG, "locationServiceTest: "+ "Null Location");
+     else
+      Log.e(TAG, "locationServiceTest: "+ location.toString());
+   }
+
 
   //Broadcast the job status and kill service
   private void updateStatus(String status, JsonObject jobStatusObj){

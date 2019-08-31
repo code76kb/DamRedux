@@ -8,8 +8,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import {getOfferAllData,testIt} from "./actions/userActions"; 
+
 const ImagePicker = NativeModules.ImagePickerModule;
 const ChildLabor = NativeModules.ChildLabor;
+const WareHouse = NativeModules.WareHouse;
 
 const TAG = "First :";
 
@@ -36,6 +38,13 @@ class First extends React.Component{
     //                                      city:'1088',
     //                                     }}));
     
+    WareHouse.getWareHouseData({},(success)=>{
+    console.log(TAG,"WareHouse DAta status :"+success);    
+    },
+    (error)=>{
+      console.log(TAG,"WareHouse DAta fetch Error :");    
+    });
+
   }
 
   componentWillReceiveProps(newProps){
@@ -67,12 +76,33 @@ class First extends React.Component{
     setTimeout(()=>ChildLabor.stopWork(),60000);
   }
 
+  serviceStart=()=>{
+    ChildLabor.startWork(
+    {job_id:'202'},
+    (success)=>{
+     console.log(TAG,"Job Start Successs Callback :",success)
+    },
+    (error)=>{});
+  }
+
+  serviceStop=()=>{
+    ChildLabor.stopWork(
+    {job_id:'209'},
+    (success)=>{
+     console.log(TAG,"Job Stop Successs Callback :",success)
+    },
+    (error)=>{
+    });
+  }
+
   render()
   {
     return (
         <View>
           <Text style={{textAlign:'center',padding:20}} onPress={this.serviceTest}>{"Hello Redux!!"}</Text>
           <Image style={{width:200,height:200}} source={{uri:this.state.img}}></Image>
+          <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStart}>{"Start!!"}</Text>
+          <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStop}>{"Stop!!"}</Text>
         </View>
     );
    }
