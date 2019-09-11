@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   NativeModules,
+  DeviceEventEmitter
 } from 'react-native';
 import { connect } from 'react-redux';
 import {getOfferAllData,testIt} from "./actions/userActions"; 
@@ -12,6 +13,7 @@ import {getOfferAllData,testIt} from "./actions/userActions";
 const ImagePicker = NativeModules.ImagePickerModule;
 const ChildLabor = NativeModules.ChildLabor;
 const WareHouse = NativeModules.WareHouse;
+const GPSWatcher = NativeModules.GPSWatcher;
 
 const TAG = "First :";
 
@@ -19,7 +21,7 @@ class First extends React.Component{
 
   constructor(props){
     super(props); 
-    this.state={img:""};
+    this.state={img:"",count:0,gps:'false'};
   }
   
   componentDidMount(){
@@ -38,12 +40,21 @@ class First extends React.Component{
     //                                      city:'1088',
     //                                     }}));
     
-    WareHouse.getWareHouseData({},(success)=>{
-    console.log(TAG,"WareHouse DAta status :"+success);    
-    },
-    (error)=>{
-      console.log(TAG,"WareHouse DAta fetch Error :");    
-    });
+    // WareHouse.getWareHouseData({},(success)=>{
+    // console.log(TAG,"WareHouse DAta status :"+success);    
+    // },
+    // (error)=>{
+    //   console.log(TAG,"WareHouse DAta fetch Error :");    
+    // });
+
+    DeviceEventEmitter.addListener("GPsStatus",(e)=>{
+     console.log(TAG,"Gps event listner :"+JSON.stringify(e));
+     this.setState({count:(this.state.count+1),gps:e.status});
+    })
+    GPSWatcher.startGpsWatch({},(status)=>{
+       console.log(TAG,"Gps status :"+status);
+       this.setState({count:(this.state.count+1),gps:status});
+    })
 
   }
 
@@ -103,6 +114,12 @@ class First extends React.Component{
           <Image style={{width:200,height:200}} source={{uri:this.state.img}}></Image>
           <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStart}>{"Start!!"}</Text>
           <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStop}>{"Stop!!"}</Text>
+
+          <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStop}>{"GPS status!!"}</Text>
+          <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStop}>{this.state.gps.toString()}</Text>
+          <Text style={{textAlign:'center',padding:20}} onPress={this.serviceStop}>{this.state.count}</Text>
+
+
         </View>
     );
    }
@@ -110,7 +127,7 @@ class First extends React.Component{
 
 
 const mapStateToProps=(state)=>{
-  return {test,offerAllData,error} = state
+  return {test} = state
 }
 
 // const mapDispatchToProps=(dispatch)=>{

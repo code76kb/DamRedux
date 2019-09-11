@@ -3,6 +3,7 @@ package com.demredx.services;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -84,26 +85,28 @@ public class ChildLaborService extends Service {
     //init location test
 
 
-//    new Handler().postDelayed(new Runnable() {
-//      @Override
-//      public void run() {
-//        Log.e(TAG, "run: after 30 sec");
-//
-//        //Perform Network Operation
-//        testApiRun();
-//
-////        //get Location updates
-////        locationServiceTest();
-//
-//      }
-//    },30000);
-    timer = new Timer();
-    timer.scheduleAtFixedRate(new TimerTask() {
+    new Handler().postDelayed(new Runnable() {
       @Override
       public void run() {
-        locationServiceTest();
+        Log.e(TAG, "run: after 30 sec");
+
+        //Perform Network Operation
+//        testApiRun();
+
+//        //get Location updates
+//        locationServiceTest();
+
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+          @Override
+          public void run() {
+            locationServiceTest();
+          }
+        },0,30000);
+
       }
-    },0,30000);
+    },00000);
+
 
   }
 

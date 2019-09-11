@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.demredx.LocalStorage.WareHousePackage;
+import com.demredx.Location.GpsWatcherPackage;
 import com.demredx.services.ChildLaborPackage;
 import com.facebook.react.PackageList;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
        packages.add(new ImagePickerPackage());//Img picker test
        packages.add(new ChildLaborPackage());//Background Services
        packages.add(new WareHousePackage());// React and android Comman localStorage manager
+       packages.add(new GpsWatcherPackage());
 
       return packages;
     }
